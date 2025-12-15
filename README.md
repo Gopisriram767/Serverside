@@ -1,5 +1,5 @@
 # Ex.05 Design a Website for Server Side Processing
-## Date:
+## Date: 15.12.25
 
 ## AIM:
  To design a website to calculate the Body Mass Index(BMI) in the server side. 
@@ -26,13 +26,72 @@ Create a HTML file to implement form based input and output.
 Publish the website in the given URL.
 
 ## PROGRAM :
+```
+views.py
+from django.shortcuts import render
+
+def calculate_bmi(request):
+    bmi = None   # Default value
+
+    if request.method == "POST":
+        height = float(request.POST.get("height"))
+        weight = float(request.POST.get("weight"))
+        bmi = weight / (height * height)
+
+        # Print to server console for debugging
+        print("Height:", height)
+        print("Weight:", weight)
+        print("BMI calculated:", bmi)
+
+    return render(request, "bmiapp/template.html", {"BMI": bmi})
+
+
+wsgi.py
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bmi.settings')
+
+application = get_wsgi_application()
+
+template.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+</head>
+<body bgcolor="blue">
+    <center>
+        <h2>BMI Calculator</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label>Height (m):</label><br>
+            <input type="text" name="height"><br><br>
+            <label>Weight (kg):</label><br>
+            <input type="text" name="weight"><br><br>
+            <button type="submit">Calculate</button>
+        </form>
+
+        
+
+        {% if BMI %}
+            <h3>Your BMI is: {{ BMI }}</h3>
+        {% endif %}
+    </center>
+</body>
+</html>
+```
+
+
 
 
 ## SERVER SIDE PROCESSING:
-
+![alt text](<bmi/Screenshot 2025-12-15 130422.png>)
 
 ## HOMEPAGE:
-
+![alt text](<bmi/Screenshot 2025-12-13 131301.png>)
 
 ## RESULT:
 The program for performing server side processing is completed successfully.
